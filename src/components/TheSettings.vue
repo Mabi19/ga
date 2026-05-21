@@ -40,13 +40,13 @@ watchEffect(() => {
     transform: scale(0.9);
     opacity: 0;
     transition:
-        transform 0.3s ease-out,
-        opacity 0.3s ease-out,
-        display 0.3s allow-discrete,
-        overlay 0.3s allow-discrete;
+        transform 0.25s ease-out,
+        opacity 0.25s ease-out,
+        display 0.25s allow-discrete,
+        overlay 0.25s allow-discrete;
 
     &::backdrop {
-        transition: background-color 0.3s ease-out;
+        transition: background-color 0.25s ease-out;
         background-color: rgb(0 0 0 / 0);
     }
 
