@@ -1,13 +1,23 @@
 <template>
     <Teleport to="body">
         <dialog closedby="any" ref="dialog" class="settings" @close="emit('close')">
-            todo: settings
+            <div>
+                <label for="function-expression">Expression</label>
+                <input type="text" name="function-expression" v-model="functionExpr" />
+            </div>
+            <div>{{ functionExpr }} = {{ functionNode?.eval(0, 0) ?? "(error)" }}</div>
+            <div>
+                <FunctionGraph :func="functionNode" class="settings-function-preview" />
+            </div>
         </dialog>
     </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef, watchEffect } from "vue";
+import { ConstantNode, type ExpressionNode } from "@/lib/expression/node";
+import { parse } from "@/lib/expression/parse";
+import { ref, shallowRef, useTemplateRef, watchEffect } from "vue";
+import FunctionGraph from "./FunctionGraph.vue";
 
 const { open } = defineProps<{
     open: boolean;
@@ -24,6 +34,15 @@ watchEffect(() => {
         dialog.value?.showModal();
     } else {
         dialog.value?.close();
+    }
+});
+
+const functionExpr = ref("");
+const functionNode = shallowRef<ExpressionNode>(new ConstantNode(0));
+watchEffect(() => {
+    const node = parse(functionExpr.value);
+    if (node) {
+        functionNode.value = node;
     }
 });
 </script>
@@ -67,5 +86,10 @@ watchEffect(() => {
             }
         }
     }
+}
+
+.settings-function-preview {
+    width: 50%;
+    aspect-ratio: 1 / 1;
 }
 </style>
