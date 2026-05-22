@@ -3,20 +3,25 @@
         <dialog closedby="any" ref="dialog" class="settings" @close="emit('close')">
             <div>
                 <label for="function-expression">Expression</label>
-                <input type="text" name="function-expression" v-model="functionExpr" />
+                <input
+                    type="text"
+                    name="function-expression"
+                    v-model="Settings.targetFunctionExpression.value"
+                />
             </div>
-            <div>{{ functionExpr }} = {{ functionNode?.eval(0, 0) ?? "(error)" }}</div>
             <div>
-                <FunctionGraph :func="functionNode" class="settings-function-preview" />
+                <FunctionGraph
+                    :func="Settings.targetFunction.value"
+                    class="settings-function-preview"
+                />
             </div>
         </dialog>
     </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ConstantNode, type ExpressionNode } from "@/lib/expression/node";
-import { parse } from "@/lib/expression/parse";
-import { ref, shallowRef, useTemplateRef, watchEffect } from "vue";
+import * as Settings from "@/settings";
+import { useTemplateRef, watchEffect } from "vue";
 import FunctionGraph from "./FunctionGraph.vue";
 
 const { open } = defineProps<{
@@ -34,15 +39,6 @@ watchEffect(() => {
         dialog.value?.showModal();
     } else {
         dialog.value?.close();
-    }
-});
-
-const functionExpr = ref("");
-const functionNode = shallowRef<ExpressionNode>(new ConstantNode(0));
-watchEffect(() => {
-    const node = parse(functionExpr.value);
-    if (node) {
-        functionNode.value = node;
     }
 });
 </script>
