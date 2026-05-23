@@ -30,7 +30,6 @@ const settingsOpen = ref(false);
 // The settings we want:
 // - Function expression
 // - Domain
-// - Parameter bit count
 // - Population size
 // - Crossover probability
 // - Crossover method

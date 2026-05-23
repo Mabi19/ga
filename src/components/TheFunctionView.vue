@@ -3,12 +3,12 @@
         <WindowHeader title="Function">
             <WindowHeaderButton icon="fullscreen" />
         </WindowHeader>
-        <FunctionGraph :func="Settings.targetFunction.value" class="function-view-graph" />
+        <FunctionGraph :func="State.targetFunction.value" class="function-view-graph" />
     </div>
 </template>
 
 <script setup lang="ts">
-import * as Settings from "@/settings";
+import * as State from "@/state";
 import FunctionGraph from "./FunctionGraph.vue";
 import WindowHeader from "./WindowHeader.vue";
 import WindowHeaderButton from "./WindowHeaderButton.vue";

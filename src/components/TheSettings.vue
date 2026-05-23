@@ -10,12 +10,12 @@
                     <input
                         type="text"
                         name="function-expression"
-                        v-model="Settings.targetFunctionExpression.value"
+                        v-model="State.targetFunctionExpression.value"
                     />
                 </div>
                 <div>
                     <FunctionGraph
-                        :func="Settings.targetFunction.value"
+                        :func="State.targetFunction.value"
                         class="settings-function-preview"
                     />
                 </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import * as Settings from "@/settings";
+import * as State from "@/state";
 import { useTemplateRef, watchEffect } from "vue";
 import FunctionGraph from "./FunctionGraph.vue";
 import WindowHeader from "./WindowHeader.vue";

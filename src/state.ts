@@ -1,6 +1,7 @@
+import { Chromosome } from "@/lib/evolution/chromosome";
+import { ConstantNode, type ExpressionNode } from "@/lib/expression/node";
 import { parse } from "@/lib/expression/parse";
 import { ref, shallowRef, watchEffect } from "vue";
-import { ConstantNode, type ExpressionNode } from "./lib/expression/node";
 
 export const targetFunctionExpression = ref("e^-(x^2 + y^2)");
 export const targetFunctionIsValid = ref(true);
@@ -14,3 +15,7 @@ watchEffect(() => {
         targetFunctionIsValid.value = false;
     }
 });
+
+export const population = shallowRef<Chromosome[]>(
+    Array.from({ length: 40 }).map((_, i) => new Chromosome(0, i + 1)),
+);

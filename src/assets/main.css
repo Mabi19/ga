@@ -12,14 +12,16 @@
     font-optical-sizing: auto;
 
     --text: black;
+    --bg: white;
+    --bg-dim: #f2eeee;
 
     --button-bg-light: rgb(30% 20% 20% / 0.1);
-    --button-border-light: rgb(30% 20% 20% / 0.2);
+    --button-dim-light: rgb(30% 20% 20% / 0.2);
     --button-bg-dark: rgb(80% 80% 90% / 0.2);
-    --button-border-dark: rgb(20% 20% 30% / 0.2);
+    --button-dim-dark: rgb(70% 70% 80% / 0.35);
 
     --button-bg: var(--button-bg-light);
-    --button-border: var(--button-border-light);
+    --button-dim: var(--button-dim-light);
     --button-shadow-color: rgb(30% 20% 20% / 0.075);
     --button-shadow-color-active: rgb(35% 25% 25% / 0.15);
 }
@@ -32,8 +34,9 @@ body {
 
 .dark {
     --text: white;
+    --bg: #22222f;
     --button-bg: var(--button-bg-dark);
-    --button-border: var(--button-border-dark);
+    --button-dim: var(--button-dim-dark);
 }
 
 button {
@@ -44,25 +47,36 @@ button {
     border-radius: 0.25em;
     padding: 0.25em;
 
+    transition:
+        box-shadow 0.1s ease-out,
+        background-color 0.1s ease-out;
+
     &.flat {
         border: none;
+        background-color: transparent;
+
+        &:hover {
+            background-color: var(--button-bg);
+        }
+
+        &:active {
+            background-color: var(--button-dim);
+        }
     }
 
     &:not(.flat) {
-        border: 1px solid var(--button-border);
+        border: 1px solid var(--button-dim);
         border-bottom-width: 2px;
         box-shadow: 0px 2px 4px 2px var(--button-shadow-color);
-    }
 
-    transition: box-shadow 0.1s ease-out;
+        &:hover {
+            box-shadow: 0px 1px 4px 2px var(--button-shadow-color-active);
+        }
 
-    &:hover {
-        box-shadow: 0px 1px 4px 2px var(--button-shadow-color-active);
-    }
-
-    &:not(.flat):active {
-        border-bottom-width: 1px;
-        margin-top: 1px;
+        &:active {
+            border-bottom-width: 1px;
+            margin-top: 1px;
+        }
     }
 }
 
