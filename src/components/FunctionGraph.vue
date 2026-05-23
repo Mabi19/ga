@@ -65,8 +65,10 @@ watch(canvas, () => {
             100,
         );
         camera.value.up.set(0, 0, 1);
-        camera.value.position.y = 5;
-        cameraLight.position.y = 5;
+        camera.value.position.y = 4;
+        camera.value.position.z = 3;
+        cameraLight.position.y = 4;
+        cameraLight.position.z = 3;
         camera.value.lookAt(new THREE.Vector3(0, 0, 0));
         renderer.value = new THREE.WebGLRenderer({
             canvas: canvas.value,
@@ -80,6 +82,7 @@ watch(canvas, () => {
         );
 
         controls.value = new OrbitControls(camera.value, canvas.value);
+        controls.value.minDistance = 1.5;
         controls.value.maxDistance = 20;
         controls.value.update();
         controls.value.addEventListener("change", () => {

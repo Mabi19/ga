@@ -3,3 +3,70 @@
 *::after {
     box-sizing: border-box;
 }
+
+:root {
+    --accent: rebeccapurple;
+    accent-color: var(--accent);
+
+    font-family: "IBM Plex Sans";
+    font-optical-sizing: auto;
+
+    --text: black;
+
+    --button-bg-light: rgb(30% 20% 20% / 0.1);
+    --button-border-light: rgb(30% 20% 20% / 0.2);
+    --button-bg-dark: rgb(80% 80% 90% / 0.2);
+    --button-border-dark: rgb(20% 20% 30% / 0.2);
+
+    --button-bg: var(--button-bg-light);
+    --button-border: var(--button-border-light);
+    --button-shadow-color: rgb(30% 20% 20% / 0.075);
+    --button-shadow-color-active: rgb(35% 25% 25% / 0.15);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+}
+
+.dark {
+    --text: white;
+    --button-bg: var(--button-bg-dark);
+    --button-border: var(--button-border-dark);
+}
+
+button {
+    font: inherit;
+    color: var(--text);
+
+    background-color: var(--button-bg);
+    border-radius: 0.25em;
+    padding: 0.25em;
+
+    &.flat {
+        border: none;
+    }
+
+    &:not(.flat) {
+        border: 1px solid var(--button-border);
+        border-bottom-width: 2px;
+        box-shadow: 0px 2px 4px 2px var(--button-shadow-color);
+    }
+
+    transition: box-shadow 0.1s ease-out;
+
+    &:hover {
+        box-shadow: 0px 1px 4px 2px var(--button-shadow-color-active);
+    }
+
+    &:not(.flat):active {
+        border-bottom-width: 1px;
+        margin-top: 1px;
+    }
+}
+
+button:has(.material-symbols-rounded) {
+    display: grid;
+    place-items: center;
+}

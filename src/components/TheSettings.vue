@@ -1,19 +1,24 @@
 <template>
     <Teleport to="body">
         <dialog closedby="any" ref="dialog" class="settings" @close="emit('close')">
-            <div>
-                <label for="function-expression">Expression</label>
-                <input
-                    type="text"
-                    name="function-expression"
-                    v-model="Settings.targetFunctionExpression.value"
-                />
-            </div>
-            <div>
-                <FunctionGraph
-                    :func="Settings.targetFunction.value"
-                    class="settings-function-preview"
-                />
+            <WindowHeader title="Settings">
+                <WindowHeaderButton @click="emit('close')" icon="close" />
+            </WindowHeader>
+            <div class="settings-content">
+                <div>
+                    <label for="function-expression">Expression</label>
+                    <input
+                        type="text"
+                        name="function-expression"
+                        v-model="Settings.targetFunctionExpression.value"
+                    />
+                </div>
+                <div>
+                    <FunctionGraph
+                        :func="Settings.targetFunction.value"
+                        class="settings-function-preview"
+                    />
+                </div>
             </div>
         </dialog>
     </Teleport>
@@ -23,6 +28,8 @@
 import * as Settings from "@/settings";
 import { useTemplateRef, watchEffect } from "vue";
 import FunctionGraph from "./FunctionGraph.vue";
+import WindowHeader from "./WindowHeader.vue";
+import WindowHeaderButton from "./WindowHeaderButton.vue";
 
 const { open } = defineProps<{
     open: boolean;
@@ -47,10 +54,13 @@ watchEffect(() => {
 .settings {
     width: calc(100vw - 2em);
     height: calc(100vh - 2em);
+    padding: 0;
     background-color: white;
     border-radius: 1em;
     border: none;
     outline: none;
+
+    flex-flow: column nowrap;
 
     transform: scale(0.9);
     opacity: 0;
@@ -66,6 +76,8 @@ watchEffect(() => {
     }
 
     &[open] {
+        display: flex;
+
         transform: scale(1);
         opacity: 1;
 
@@ -82,6 +94,11 @@ watchEffect(() => {
             }
         }
     }
+}
+
+.settings-content {
+    padding: 0.5em;
+    overflow-y: auto;
 }
 
 .settings-function-preview {
