@@ -1,6 +1,5 @@
 <!--
 TODO
-adjust spacing (this'll need to have the table turned into a grid, with a subgrid for each row...)
 add a way to highlight chromosomes on the graph (hover/tap)
 add a way to show bits instead of x/y
 show heritage in expanded region (incl. jumping to parent. also, back button?)
@@ -27,6 +26,14 @@ show heritage in expanded region (incl. jumping to parent. also, back button?)
                         :chromosome="chromosome"
                         v-for="chromosome of State.population.value"
                         :key="chromosome.id"
+                        :class="
+                            State.highlightID.value == chromosome.id && hasStrongHighlight
+                                ? 'active'
+                                : null
+                        "
+                        @click="strongHighlight(chromosome)"
+                        @mouseenter="weakHighlightIn(chromosome)"
+                        @mouseleave="weakHighlightOut()"
                     />
                 </tbody>
             </table>
@@ -35,10 +42,43 @@ show heritage in expanded region (incl. jumping to parent. also, back button?)
 </template>
 
 <script setup lang="ts">
+import type { Chromosome } from "@/lib/evolution/chromosome";
 import * as State from "@/state";
+import { ref } from "vue";
 import PopulationRow from "./PopulationRow.vue";
 import WindowHeader from "./WindowHeader.vue";
 import WindowHeaderButton from "./WindowHeaderButton.vue";
+
+// If this is true, an entry was clicked, and hovering does nothing.
+const hasStrongHighlight = ref(false);
+
+function weakHighlightIn(chromosome: Chromosome) {
+    if (hasStrongHighlight.value) {
+        return;
+    }
+    State.highlightID.value = chromosome.id;
+}
+
+function weakHighlightOut() {
+    if (hasStrongHighlight.value) {
+        return;
+    }
+    State.highlightID.value = null;
+}
+
+function strongHighlight(chromosome: Chromosome) {
+    if (hasStrongHighlight.value) {
+        if (State.highlightID.value == chromosome.id) {
+            // the element is still hovered
+            hasStrongHighlight.value = false;
+        } else {
+            State.highlightID.value = chromosome.id;
+        }
+    } else {
+        State.highlightID.value = chromosome.id;
+        hasStrongHighlight.value = true;
+    }
+}
 </script>
 
 <style scoped>
@@ -73,6 +113,14 @@ import WindowHeaderButton from "./WindowHeaderButton.vue";
         grid-template-columns: subgrid;
         grid-column: 1 / 6;
         align-items: center;
+    }
+
+    .chromosome:hover {
+        box-shadow: inset 0px 0px 0px 3px rgb(from var(--accent) r g b / 0.4);
+    }
+
+    .chromosome.active {
+        box-shadow: inset 0px 0px 0px 3px var(--accent);
     }
 
     .chromosome-extra {

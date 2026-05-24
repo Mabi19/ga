@@ -1,16 +1,18 @@
 <template>
-    <canvas ref="canvas" class="function-graph"> </canvas>
+    <canvas ref="canvas" class="function-graph"></canvas>
 </template>
 
 <script setup lang="ts">
 import { createFunctionGeometry } from "@/lib/3d/function-geometry";
 import type { ExpressionNode } from "@/lib/expression/node";
+import * as State from "@/state";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { computed, markRaw, shallowRef, useTemplateRef, watch, watchEffect } from "vue";
 
-const { func } = defineProps<{
+const { func, markers = false } = defineProps<{
     func: ExpressionNode;
+    markers?: boolean;
 }>();
 
 const scene = new THREE.Scene();
@@ -31,6 +33,41 @@ const material = new THREE.MeshPhongMaterial({
 });
 const mesh = new THREE.Mesh(undefined, material);
 scene.add(mesh);
+
+const markerGeometry = new THREE.SphereGeometry(0.1);
+const markerMaterial = new THREE.MeshLambertMaterial();
+const markersMesh = new THREE.InstancedMesh(markerGeometry, markerMaterial, State.MAX_POPULATION);
+const markerColorInactive = new THREE.Color("#22bb22");
+const markerColorActive = new THREE.Color("#eecc00");
+watchEffect(() => {
+    markersMesh.visible = markers;
+    if (markers) {
+        markersMesh.count = State.population.value.length;
+        for (let i = 0; i < State.population.value.length; i++) {
+            const chromosome = State.population.value[i]!;
+            const mat = new THREE.Matrix4();
+            mat.setPosition(
+                new THREE.Vector3(
+                    chromosome.x,
+                    chromosome.y,
+                    State.targetFunction.value.eval(chromosome.x, chromosome.y),
+                ),
+            );
+            markersMesh.setMatrixAt(i, mat);
+
+            if (chromosome.id == State.highlightID.value) {
+                markersMesh.setColorAt(i, markerColorActive);
+            } else {
+                markersMesh.setColorAt(i, markerColorInactive);
+            }
+        }
+        markersMesh.instanceMatrix.needsUpdate = true;
+        markersMesh.instanceColor!.needsUpdate = true;
+    }
+    render();
+});
+scene.add(markersMesh);
+
 scene.add(new THREE.AxesHelper());
 
 const hemisphereLight = new THREE.HemisphereLight("#ffffff", "#7f7f7f", 1.0);

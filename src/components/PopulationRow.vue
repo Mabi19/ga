@@ -1,5 +1,5 @@
 <template>
-    <tr class="chromosome">
+    <tr class="chromosome" v-bind="$attrs">
         <td>
             <button class="flat">
                 <MaterialIcon

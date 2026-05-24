@@ -3,7 +3,11 @@
         <WindowHeader title="Function">
             <WindowHeaderButton icon="fullscreen" />
         </WindowHeader>
-        <FunctionGraph :func="State.targetFunction.value" class="function-view-graph" />
+        <FunctionGraph
+            :func="State.targetFunction.value"
+            :markers="true"
+            class="function-view-graph"
+        />
     </div>
 </template>
 
