@@ -1,11 +1,8 @@
 <template>
     <tr class="chromosome" v-bind="$attrs">
         <td>
-            <button class="flat">
-                <MaterialIcon
-                    :name="isExpanded ? 'collapse_content' : 'expand_content'"
-                    @click="isExpanded = !isExpanded"
-                />
+            <button class="flat" @click.stop="isExpanded = !isExpanded">
+                <MaterialIcon :name="isExpanded ? 'collapse_content' : 'expand_content'" />
             </button>
         </td>
         <td>{{ chromosome.id }}</td>
