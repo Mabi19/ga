@@ -14,6 +14,7 @@
     --text: black;
     --bg: white;
     --bg-dim: #f2eeee;
+    --bg-dimmer: #e5dddd;
 
     --button-bg-light: rgb(30% 20% 20% / 0.1);
     --button-dim-light: rgb(30% 20% 20% / 0.2);

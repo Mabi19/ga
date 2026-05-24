@@ -16,7 +16,9 @@
         </td>
     </tr>
     <tr v-if="isExpanded" class="chromosome-extra">
-        <td>btn</td>
+        <td>
+            <button class="flat"><MaterialIcon name="jump_to_element" /></button>
+        </td>
         <td colspan="4">hi</td>
     </tr>
 </template>

@@ -14,7 +14,7 @@ show heritage in expanded region (incl. jumping to parent. also, back button?)
         <div class="population-table-wrapper">
             <table id="population-table">
                 <thead>
-                    <tr>
+                    <tr class="header">
                         <th><!-- expand button --></th>
                         <th>ID</th>
                         <th>X</th>
@@ -57,7 +57,27 @@ import WindowHeaderButton from "./WindowHeaderButton.vue";
 /* this affects the styles of PopulationRows as well */
 #population-table {
     width: 100%;
-    border-collapse: collapse;
+
+    display: grid;
+    grid-template-columns: max-content max-content auto auto auto;
+
+    thead,
+    tbody {
+        display: contents;
+    }
+
+    .chromosome,
+    .chromosome-extra,
+    .header {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column: 1 / 6;
+        align-items: center;
+    }
+
+    .chromosome-extra {
+        background-color: var(--bg-dimmer);
+    }
 
     tr:nth-child(even of .chromosome) {
         background-color: var(--bg-dim);
