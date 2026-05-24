@@ -1,8 +1,8 @@
 <!--
 TODO
-add a way to highlight chromosomes on the graph (hover/tap)
 add a way to show bits instead of x/y
 show heritage in expanded region (incl. jumping to parent. also, back button?)
+sorting
 -->
 
 <template>
