@@ -46,7 +46,7 @@ button {
 
     background-color: var(--button-bg);
     border-radius: 0.25em;
-    padding: 0.25em;
+    padding: 0.25em 0.5em;
 
     transition:
         box-shadow 0.1s ease-out,
@@ -84,4 +84,5 @@ button {
 button:has(.material-symbols-rounded) {
     display: grid;
     place-items: center;
+    padding: 0.25em;
 }

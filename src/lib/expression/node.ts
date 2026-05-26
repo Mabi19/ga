@@ -146,8 +146,6 @@ export class FunctionInvocationNode implements ExpressionNode {
     }
 
     eval(x: number, y: number): number {
-        // TODO: call the function
-        // only support a selection of one-parameter functions, like trig, sqrt, floor and ceil
         const inner = this.contents.eval(x, y);
         return FUNCTIONS[this.functionName](inner);
     }

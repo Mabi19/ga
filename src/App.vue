@@ -4,10 +4,11 @@
         <TheFunctionView class="grid-function" />
         <TheFitnessView class="grid-fitness" />
     </main>
-    <!-- todo: timeline -->
+    <TheTimeline />
     <div id="status-bar" class="dark">
-        <div class="generation">Generation ?</div>
+        <div class="generation">Generation {{ State.currentGeneration }}</div>
         <div class="controls">
+            <button @click="State.nextGeneration()">Step</button>
             <button @click="settingsOpen = true"><MaterialIcon name="settings" /></button>
         </div>
     </div>
@@ -16,12 +17,14 @@
 </template>
 
 <script setup lang="ts">
+import * as State from "@/state";
 import { ref } from "vue";
 import MaterialIcon from "./components/MaterialIcon.vue";
 import TheFitnessView from "./components/TheFitnessView.vue";
 import TheFunctionView from "./components/TheFunctionView.vue";
 import ThePopulationView from "./components/ThePopulationView.vue";
 import TheSettings from "./components/TheSettings.vue";
+import TheTimeline from "./components/TheTimeline.vue";
 
 const settingsOpen = ref(false);
 
@@ -88,6 +91,12 @@ const settingsOpen = ref(false);
     gap: 0.5em;
     justify-content: space-between;
     align-items: center;
+
+    .controls {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 0.5em;
+    }
 
     .generation {
         font-weight: bold;
