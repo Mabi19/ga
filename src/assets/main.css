@@ -16,15 +16,15 @@
     --bg-dim: #f2eeee;
     --bg-dimmer: #e5dddd;
 
-    --button-bg-light: rgb(30% 20% 20% / 0.1);
-    --button-dim-light: rgb(30% 20% 20% / 0.2);
-    --button-bg-dark: rgb(80% 80% 90% / 0.2);
-    --button-dim-dark: rgb(70% 70% 80% / 0.35);
+    --input-bg-light: rgb(30% 20% 20% / 0.1);
+    --input-dim-light: rgb(30% 20% 20% / 0.2);
+    --input-bg-dark: rgb(80% 80% 90% / 0.2);
+    --input-dim-dark: rgb(70% 70% 80% / 0.35);
 
-    --button-bg: var(--button-bg-light);
-    --button-dim: var(--button-dim-light);
-    --button-shadow-color: rgb(30% 20% 20% / 0.075);
-    --button-shadow-color-active: rgb(35% 25% 25% / 0.15);
+    --input-bg: var(--input-bg-light);
+    --input-dim: var(--input-dim-light);
+    --input-shadow-color: rgb(30% 20% 20% / 0.075);
+    --input-shadow-color-active: rgb(35% 25% 25% / 0.15);
 }
 
 body {
@@ -36,15 +36,15 @@ body {
 .dark {
     --text: white;
     --bg: #22222f;
-    --button-bg: var(--button-bg-dark);
-    --button-dim: var(--button-dim-dark);
+    --input-bg: var(--input-bg-dark);
+    --input-dim: var(--input-dim-dark);
 }
 
 button {
     font: inherit;
     color: var(--text);
 
-    background-color: var(--button-bg);
+    background-color: var(--input-bg);
     border-radius: 0.25em;
     padding: 0.25em 0.5em;
 
@@ -57,21 +57,21 @@ button {
         background-color: transparent;
 
         &:hover {
-            background-color: var(--button-bg);
+            background-color: var(--input-bg);
         }
 
         &:active {
-            background-color: var(--button-dim);
+            background-color: var(--input-dim);
         }
     }
 
     &:not(.flat) {
-        border: 1px solid var(--button-dim);
+        border: 1px solid var(--input-dim);
         border-bottom-width: 2px;
-        box-shadow: 0px 2px 4px 2px var(--button-shadow-color);
+        box-shadow: 0px 2px 4px 2px var(--input-shadow-color);
 
         &:hover {
-            box-shadow: 0px 1px 4px 2px var(--button-shadow-color-active);
+            box-shadow: 0px 1px 4px 2px var(--input-shadow-color-active);
         }
 
         &:active {
@@ -85,4 +85,33 @@ button:has(.material-symbols-rounded) {
     display: grid;
     place-items: center;
     padding: 0.25em;
+}
+
+input[type="text"] {
+    font: inherit;
+    padding: 0.25em;
+    border-radius: 0.25em;
+    border: 1px solid var(--input-dim);
+    box-shadow: 0px 2px 4px 1px var(--input-shadow-color);
+    outline: 2px solid transparent;
+
+    transition:
+        box-shadow 0.1s ease-out,
+        outline-color 0.1s ease-out;
+
+    &:hover {
+        box-shadow: 0px 1px 4px 2px var(--input-shadow-color-active);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--accent);
+    }
+
+    &:invalid {
+        outline: 2px solid tomato;
+    }
+}
+
+.material-symbols-rounded {
+    user-select: none;
 }

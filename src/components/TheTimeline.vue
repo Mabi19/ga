@@ -58,19 +58,19 @@ watch(State.currentGeneration, () => {
 .timeline-label {
     display: block;
     padding: 0.25em 0.5em;
-    background-color: var(--button-bg);
-    border: 1px solid var(--button-dim);
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-dim);
     border-radius: 0.25em 0.25em 0 0;
 
     user-select: none;
 }
 
 .timeline-label:hover {
-    box-shadow: 0px 2px 4px 2px var(--button-shadow-color-active);
+    box-shadow: 0px 2px 4px 2px var(--input-shadow-color-active);
 }
 
 .timeline-input:checked + .timeline-label {
-    background-color: var(--button-dim);
+    background-color: var(--input-dim);
     margin-top: 0.25em;
     padding-bottom: 0;
     box-shadow: none;

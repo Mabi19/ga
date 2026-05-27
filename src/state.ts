@@ -1,4 +1,5 @@
 import { Chromosome } from "@/lib/evolution/chromosome";
+import type { FunctionDomain } from "@/lib/expression/domain";
 import { ConstantNode, type ExpressionNode } from "@/lib/expression/node";
 import { parse } from "@/lib/expression/parse";
 import { computed, ref, shallowRef, triggerRef, watchEffect } from "vue";
@@ -18,6 +19,8 @@ watchEffect(() => {
         targetFunctionIsValid.value = false;
     }
 });
+
+export const targetFunctionDomain = ref<FunctionDomain>({ xMin: -3, xMax: 3, yMin: -3, yMax: 3 });
 
 export const generations = shallowRef([
     Array.from({ length: 32 }).map((_, i) => new Chromosome(0, i + 1)),
