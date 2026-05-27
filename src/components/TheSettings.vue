@@ -28,15 +28,15 @@
                                     <input
                                         type="text"
                                         inputmode="numeric"
-                                        v-model.number="domainXMin"
-                                        v-invalid="domainXMin < -10 ? 'Too low' : false"
+                                        v-model="domain.xMin"
+                                        v-invalid="testDomainLow(domain.xMin)"
                                     />
                                     <span>, </span>
                                     <input
                                         type="text"
                                         inputmode="numeric"
-                                        v-model.number="domainXMax"
-                                        v-invalid="domainXMax > 10 ? 'Too high' : false"
+                                        v-model.number="domain.xMax"
+                                        v-invalid="testDomainHigh(domain.xMax)"
                                     />
                                     <span>]</span>
                                 </div>
@@ -45,15 +45,15 @@
                                     <input
                                         type="text"
                                         inputmode="numeric"
-                                        v-model.number="domainYMin"
-                                        v-invalid="domainYMin < -10 ? 'Too low' : false"
+                                        v-model.number="domain.yMin"
+                                        v-invalid="testDomainLow(domain.yMin)"
                                     />
                                     <span>, </span>
                                     <input
                                         type="text"
                                         inputmode="numeric"
-                                        v-model.number="domainYMax"
-                                        v-invalid="domainYMax > 10 ? 'Too high' : false"
+                                        v-model.number="domain.yMax"
+                                        v-invalid="testDomainHigh(domain.yMax)"
                                     />
                                     <span>]</span>
                                 </div>
@@ -62,6 +62,7 @@
                         </div>
                         <FunctionGraph
                             :func="State.targetFunction.value"
+                            :domain="State.targetFunctionDomain.value"
                             class="function-preview"
                         />
                     </div>
@@ -76,11 +77,10 @@
 
 <script setup lang="ts">
 import * as State from "@/state";
-import { computed, ref, useTemplateRef, watchEffect } from "vue";
+import { ref, useTemplateRef, watchEffect } from "vue";
 import FunctionGraph from "./FunctionGraph.vue";
 import WindowHeader from "./WindowHeader.vue";
 import WindowHeaderButton from "./WindowHeaderButton.vue";
-import type { FunctionDomain } from "@/lib/expression/domain.ts";
 import { vInvalid } from "@/lib/invalid-directive.ts";
 import WarningLabel from "./WarningLabel.vue";
 
@@ -102,36 +102,50 @@ watchEffect(() => {
     }
 });
 
-const domain = ref<FunctionDomain>({ ...State.targetFunctionDomain.value });
-function makeDomainParameter(name: keyof FunctionDomain) {
-    return computed({
-        get: () => domain.value[name],
-        set: (v) => {
-            if (typeof v == "number") {
-                domain.value[name] = v;
-            }
-        },
-    });
+const domain = ref({
+    xMin: State.targetFunctionDomain.value.xMin.toString(),
+    xMax: State.targetFunctionDomain.value.xMax.toString(),
+    yMin: State.targetFunctionDomain.value.yMin.toString(),
+    yMax: State.targetFunctionDomain.value.yMax.toString(),
+});
+
+function testDomainLow(vs: string) {
+    const v = parseFloat(vs);
+    if (isNaN(v)) {
+        return "Invalid number";
+    } else if (v < -10) {
+        return "Too low";
+    } else {
+        return false;
+    }
 }
 
-// TODO: This is very janky. Unjank it
-const domainXMin = makeDomainParameter("xMin");
-const domainXMax = makeDomainParameter("xMax");
-const domainYMin = makeDomainParameter("yMin");
-const domainYMax = makeDomainParameter("yMax");
+function testDomainHigh(vs: string) {
+    const v = parseFloat(vs);
+    if (isNaN(v)) {
+        return "Invalid number";
+    } else if (v > 10) {
+        return "Too high";
+    } else {
+        return false;
+    }
+}
+
 const domainValid = ref(true);
 watchEffect(() => {
-    console.log("domain update");
-    if (
-        domain.value.xMin >= -10 &&
-        domain.value.xMax <= 10 &&
-        domain.value.xMin < domain.value.xMax &&
-        domain.value.yMin >= -10 &&
-        domain.value.yMax <= 10 &&
-        domain.value.yMin < domain.value.yMax
-    ) {
+    const xMin = parseFloat(domain.value.xMin);
+    const xMax = parseFloat(domain.value.xMax);
+    const yMin = parseFloat(domain.value.yMin);
+    const yMax = parseFloat(domain.value.yMax);
+
+    if (xMin >= -10 && xMax <= 10 && xMin < xMax && yMin >= -10 && yMax <= 10 && yMin < yMax) {
         domainValid.value = true;
-        State.targetFunctionDomain.value = { ...domain.value };
+        State.targetFunctionDomain.value = {
+            xMin,
+            xMax,
+            yMin,
+            yMax,
+        };
     } else {
         domainValid.value = false;
     }

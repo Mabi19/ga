@@ -5,6 +5,7 @@
         </WindowHeader>
         <FunctionGraph
             :func="State.targetFunction.value"
+            :domain="State.targetFunctionDomain.value"
             :markers="true"
             class="function-view-graph"
         />

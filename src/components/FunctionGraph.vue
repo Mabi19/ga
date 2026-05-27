@@ -5,13 +5,19 @@
 <script setup lang="ts">
 import { createFunctionGeometry } from "@/lib/3d/function-geometry";
 import type { ExpressionNode } from "@/lib/expression/node";
+import type { FunctionDomain } from "@/lib/expression/domain";
 import * as State from "@/state";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { computed, markRaw, shallowRef, useTemplateRef, watch, watchEffect } from "vue";
 
-const { func, markers = false } = defineProps<{
+const {
+    func,
+    domain,
+    markers = false,
+} = defineProps<{
     func: ExpressionNode;
+    domain: FunctionDomain;
     markers?: boolean;
 }>();
 
@@ -22,8 +28,19 @@ const camera = shallowRef<THREE.PerspectiveCamera>();
 const renderer = shallowRef<THREE.WebGLRenderer>();
 const controls = shallowRef<OrbitControls>();
 
+const orbitPoint = computed(
+    () => new THREE.Vector3((domain.xMin + domain.xMax) / 2, (domain.yMin + domain.yMax) / 2, 0),
+);
+watch(orbitPoint, () => {
+    if (camera.value && controls.value) {
+        camera.value.lookAt(orbitPoint.value);
+        controls.value.target = orbitPoint.value;
+        controls.value.update();
+    }
+});
+
 const geometry = computed(() => {
-    return markRaw(createFunctionGeometry(func, { xMin: -3, xMax: 3, yMin: -3, yMax: 3 }));
+    return markRaw(createFunctionGeometry(func, domain));
 });
 
 const material = new THREE.MeshPhongMaterial({
@@ -33,6 +50,11 @@ const material = new THREE.MeshPhongMaterial({
 });
 const mesh = new THREE.Mesh(undefined, material);
 scene.add(mesh);
+
+watchEffect(() => {
+    mesh.geometry = geometry.value;
+    render();
+});
 
 const markerGeometry = new THREE.SphereGeometry(0.1);
 const markerMaterial = new THREE.MeshLambertMaterial();
@@ -79,11 +101,6 @@ cameraLight.target.position.set(0, 0, 0);
 scene.add(cameraLight);
 scene.add(cameraLight.target);
 
-watchEffect(() => {
-    mesh.geometry = geometry.value;
-    render();
-});
-
 function render() {
     if (!renderer.value || !camera.value) {
         return;
@@ -102,11 +119,11 @@ watch(canvas, () => {
             100,
         );
         camera.value.up.set(0, 0, 1);
-        camera.value.position.y = 4;
-        camera.value.position.z = 3;
-        cameraLight.position.y = 4;
-        cameraLight.position.z = 3;
-        camera.value.lookAt(new THREE.Vector3(0, 0, 0));
+        camera.value.position.y = orbitPoint.value.y + 4;
+        camera.value.position.z = orbitPoint.value.z + 3;
+        cameraLight.position.y = orbitPoint.value.y + 4;
+        cameraLight.position.z = orbitPoint.value.z + 3;
+        camera.value.lookAt(orbitPoint.value);
         renderer.value = new THREE.WebGLRenderer({
             canvas: canvas.value,
             alpha: true,
@@ -121,6 +138,7 @@ watch(canvas, () => {
         controls.value = new OrbitControls(camera.value, canvas.value);
         controls.value.minDistance = 1.5;
         controls.value.maxDistance = 20;
+        controls.value.target = orbitPoint.value;
         controls.value.update();
         controls.value.addEventListener("change", () => {
             cameraLight.position.copy(camera.value!.position);

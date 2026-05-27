@@ -1,6 +1,13 @@
+import * as State from "@/state";
+
 type HeritageEntry =
     | { type: "parent"; parent: Chromosome; usedBits: number[] }
     | { type: "mutate"; flippedBits: number[] };
+
+// Map a value x in [0, 1] to [low, high]
+function mapTo(x: number, low: number, high: number) {
+    return x * (high - low) + low;
+}
 
 /** A specimen of the population. Immutable. */
 export class Chromosome {
@@ -10,11 +17,19 @@ export class Chromosome {
     private _id: `${number}#${number}`;
 
     get x() {
-        return this._x;
+        return mapTo(
+            this._x,
+            State.targetFunctionDomain.value.xMin,
+            State.targetFunctionDomain.value.xMax,
+        );
     }
 
     get y() {
-        return this._y;
+        return mapTo(
+            this._y,
+            State.targetFunctionDomain.value.yMin,
+            State.targetFunctionDomain.value.yMax,
+        );
     }
 
     get id() {

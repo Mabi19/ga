@@ -27,7 +27,7 @@ export const generations = shallowRef([
 ]);
 export const currentGeneration = ref(0);
 export const population = computed(() => {
-    return generations.value[currentGeneration.value];
+    return generations.value[currentGeneration.value]!;
 });
 
 export const highlightID = ref<string | null>(null);

@@ -2,13 +2,7 @@ import type { ExpressionNode } from "@/lib/expression/node";
 import type { BufferGeometry } from "three";
 import * as THREE from "three";
 import { OklabColor } from "../oklab";
-
-interface FunctionDomain {
-    xMin: number;
-    xMax: number;
-    yMin: number;
-    yMax: number;
-}
+import type { FunctionDomain } from "@/lib/expression/domain";
 
 const COLOR_HIGH = new OklabColor(0.5, 0.15, 0.07);
 const COLOR_LOW = new OklabColor(0.5, -0.05, -0.1);
@@ -19,7 +13,7 @@ export function createFunctionGeometry(
 ): BufferGeometry {
     const geom = new THREE.BufferGeometry();
 
-    const RESOLUTION = 32;
+    const RESOLUTION = 64;
     const positions = new Float32Array(3 * RESOLUTION * RESOLUTION);
 
     const xStep = (xMax - xMin) / (RESOLUTION - 1);
