@@ -14,10 +14,49 @@
     </tr>
     <tr v-if="isExpanded" class="chromosome-extra">
         <td class="chromosome-extra-wrapper" colspan="5">
-            <div class="bits-row">
+            <div class="heritage-row" v-if="chromosome.heritage.length == 0">
+                <div class="origin cell"><abbr title="Randomly generated">rnd</abbr></div>
                 <div class="bits-x cell">{{ chromosome.bits.slice(0, 6) }}</div>
                 <div class="bits-y cell">{{ chromosome.bits.slice(6, 12) }}</div>
             </div>
+            <template v-else>
+                <!-- eslint-disable-next-line vue/require-v-for-key -->
+                <div class="heritage-row" v-for="entry of chromosome.heritage">
+                    <template v-if="entry.type == 'parent'">
+                        <div class="goto cell">
+                            <button class="flat"><MaterialIcon name="jump_to_element" /></button>
+                        </div>
+                        <div class="origin cell">{{ entry.parent.id }}</div>
+                        <div class="bits-x cell">
+                            <PopulationRowBits
+                                :bits="entry.parent.bits.slice(0, 6)"
+                                :highlight="entry.usedBits.slice(0, 6)"
+                            />
+                        </div>
+                        <div class="bits-y cell">
+                            <PopulationRowBits
+                                :bits="entry.parent.bits.slice(6, 12)"
+                                :highlight="entry.usedBits.slice(6, 12)"
+                            />
+                        </div>
+                    </template>
+                    <template v-if="entry.type == 'mutate'"
+                        ><div class="origin cell"><abbr title="Mutated">mut</abbr></div>
+                        <div class="bits-x cell">
+                            <PopulationRowBits
+                                :bits="chromosome.bits.slice(0, 6)"
+                                :highlight="entry.flippedBits.slice(0, 6)"
+                            />
+                        </div>
+                        <div class="bits-y cell">
+                            <PopulationRowBits
+                                :bits="chromosome.bits.slice(6, 12)"
+                                :highlight="entry.flippedBits.slice(6, 12)"
+                            />
+                        </div>
+                    </template>
+                </div>
+            </template>
         </td>
     </tr>
 </template>
@@ -27,6 +66,7 @@ import type { Chromosome } from "@/lib/evolution/chromosome";
 import * as State from "@/state";
 import { ref } from "vue";
 import MaterialIcon from "./MaterialIcon.vue";
+import PopulationRowBits from "./PopulationRowBits.vue";
 
 const { chromosome } = defineProps<{ chromosome: Chromosome }>();
 
@@ -37,7 +77,7 @@ function formatNumber(x: number) {
 const isExpanded = ref(false);
 </script>
 
-<!-- This is styled by ThePopulationView, except we control our contents. -->
+<!-- This is partly styled by ThePopulationView, except we control our contents. -->
 <style scoped>
 .cell {
     padding: 0.25em;
@@ -50,16 +90,23 @@ const isExpanded = ref(false);
     padding: 0 !important;
 }
 
-.bits-row {
+.heritage-row {
     display: grid;
     grid-template-columns: subgrid;
-    grid-column: 3 / 5;
+    grid-column: 1 / 6;
+}
+
+.origin {
+    grid-column: 2;
+    text-align: left;
 }
 
 .bits-x {
+    grid-column: 3;
     text-align: right;
 }
 .bits-y {
+    grid-column: 4;
     text-align: left;
 }
 </style>

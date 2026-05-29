@@ -1,8 +1,9 @@
 import * as State from "@/state";
 
+// Any ?Bits[] is an array of 12 booleans, same as the amount of bits in a chromosome.
 type HeritageEntry =
-    | { type: "parent"; parent: Chromosome; usedBits: number[] }
-    | { type: "mutate"; flippedBits: number[] };
+    | { type: "parent"; parent: Chromosome; usedBits: boolean[] }
+    | { type: "mutate"; flippedBits: boolean[] };
 
 // Map a value x in [0, 1] to [low, high]
 function mapTo(x: number, low: number, high: number) {

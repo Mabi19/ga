@@ -163,7 +163,7 @@ function strongHighlight(chromosome: Chromosome) {
     width: 100%;
 
     display: grid;
-    grid-template-columns: max-content max-content auto auto auto;
+    grid-template-columns: max-content max-content 1fr 1fr 1fr;
 
     thead,
     tbody {
