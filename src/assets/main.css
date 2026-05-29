@@ -40,7 +40,7 @@ body {
     --input-dim: var(--input-dim-dark);
 }
 
-button {
+button:not(.raw) {
     font: inherit;
     color: var(--text);
 
@@ -79,12 +79,12 @@ button {
             margin-top: 1px;
         }
     }
-}
 
-button:has(.material-symbols-rounded) {
-    display: grid;
-    place-items: center;
-    padding: 0.25em;
+    &:has(.material-symbols-rounded) {
+        display: grid;
+        place-items: center;
+        padding: 0.25em;
+    }
 }
 
 input[type="text"] {
