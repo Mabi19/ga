@@ -20,11 +20,11 @@ const { ascending: up, descending: down } = defineProps<{
     border: none;
 
     &:hover {
-        opacity: 0.9;
+        opacity: 0.75;
     }
 
     &:active {
-        opacity: 0.8;
+        opacity: 0.6;
     }
 }
 </style>
