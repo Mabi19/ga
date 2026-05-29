@@ -11,22 +11,22 @@ function mapTo(x: number, low: number, high: number) {
 
 /** A specimen of the population. Immutable. */
 export class Chromosome {
-    // TODO: replace these two with a bit string
-    private _x: number;
-    private _y: number;
+    private _bits: number;
     private _id: `${number}#${number}`;
 
     get x() {
+        const value = ((this._bits >> 6) & 0b111111) / 0b111111;
         return mapTo(
-            this._x,
+            value,
             State.targetFunctionDomain.value.xMin,
             State.targetFunctionDomain.value.xMax,
         );
     }
 
     get y() {
+        const value = (this._bits & 0b111111) / 0b111111;
         return mapTo(
-            this._y,
+            value,
             State.targetFunctionDomain.value.yMin,
             State.targetFunctionDomain.value.yMax,
         );
@@ -36,6 +36,10 @@ export class Chromosome {
         return this._id;
     }
 
+    get bits() {
+        return this._bits.toString(2).padStart(12, "0");
+    }
+
     get heritage(): HeritageEntry[] {
         // TODO: track this
         return [];
@@ -43,7 +47,6 @@ export class Chromosome {
 
     constructor(generation: number, index: number) {
         this._id = `${generation}#${index}`;
-        this._x = Math.random();
-        this._y = Math.random();
+        this._bits = Math.floor(Math.random() * 0x1000);
     }
 }
