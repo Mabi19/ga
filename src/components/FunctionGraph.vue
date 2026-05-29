@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import { createFunctionGeometry } from "@/lib/3d/function-geometry";
-import type { ExpressionNode } from "@/lib/expression/node";
 import type { FunctionDomain } from "@/lib/expression/domain";
+import type { ExpressionNode } from "@/lib/expression/node";
 import * as State from "@/state";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -119,10 +119,10 @@ watch(canvas, () => {
             100,
         );
         camera.value.up.set(0, 0, 1);
-        camera.value.position.y = orbitPoint.value.y + 4;
-        camera.value.position.z = orbitPoint.value.z + 3;
-        cameraLight.position.y = orbitPoint.value.y + 4;
-        cameraLight.position.z = orbitPoint.value.z + 3;
+        camera.value.position.y = orbitPoint.value.y - 3;
+        camera.value.position.z = orbitPoint.value.z + 4;
+        cameraLight.position.y = orbitPoint.value.y - 3;
+        cameraLight.position.z = orbitPoint.value.z + 4;
         camera.value.lookAt(orbitPoint.value);
         renderer.value = new THREE.WebGLRenderer({
             canvas: canvas.value,
