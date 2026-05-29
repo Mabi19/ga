@@ -13,10 +13,12 @@
         </td>
     </tr>
     <tr v-if="isExpanded" class="chromosome-extra">
-        <td>
-            <button class="flat"><MaterialIcon name="jump_to_element" /></button>
+        <td class="chromosome-extra-wrapper" colspan="5">
+            <div class="bits-row">
+                <div class="bits-x cell">{{ chromosome.bits.slice(0, 6) }}</div>
+                <div class="bits-y cell">{{ chromosome.bits.slice(6, 12) }}</div>
+            </div>
         </td>
-        <td colspan="4">hi</td>
     </tr>
 </template>
 
@@ -35,4 +37,29 @@ function formatNumber(x: number) {
 const isExpanded = ref(false);
 </script>
 
-<!-- This is styled by ThePopulationView. -->
+<!-- This is styled by ThePopulationView, except we control our contents. -->
+<style scoped>
+.cell {
+    padding: 0.25em;
+}
+
+.chromosome-extra-wrapper {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / 6;
+    padding: 0 !important;
+}
+
+.bits-row {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 3 / 5;
+}
+
+.bits-x {
+    text-align: right;
+}
+.bits-y {
+    text-align: left;
+}
+</style>

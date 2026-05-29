@@ -179,6 +179,13 @@ function strongHighlight(chromosome: Chromosome) {
         align-items: center;
     }
 
+    .header {
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(8px);
+        background-color: rgb(from var(--bg) r g b / 50%);
+    }
+
     .chromosome:hover {
         box-shadow: inset 0px 0px 0px 3px rgb(from var(--accent) r g b / 0.4);
     }
