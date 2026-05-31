@@ -87,7 +87,8 @@ button:not(.raw) {
     }
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
     font: inherit;
     padding: 0.25em;
     border-radius: 0.25em;

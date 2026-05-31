@@ -24,7 +24,9 @@
                 <div class="heritage-row" v-for="entry of chromosome.heritage">
                     <template v-if="entry.type == 'parent'">
                         <div class="goto cell">
-                            <button class="flat"><MaterialIcon name="jump_to_element" /></button>
+                            <button class="flat" @click="jumpToParent(entry.parent)">
+                                <MaterialIcon name="jump_to_element" />
+                            </button>
                         </div>
                         <div class="origin cell">{{ entry.parent.id }}</div>
                         <div class="bits-x cell">
@@ -75,6 +77,11 @@ function formatNumber(x: number) {
 }
 
 const isExpanded = ref(false);
+
+function jumpToParent(parent: Chromosome) {
+    // TODO
+    void parent;
+}
 </script>
 
 <!-- This is partly styled by ThePopulationView, except we control our contents. -->

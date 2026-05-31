@@ -22,15 +22,26 @@ watchEffect(() => {
 
 export const targetFunctionDomain = ref<FunctionDomain>({ xMin: -3, xMax: 3, yMin: -3, yMax: 3 });
 
-export const generations = shallowRef([
-    Array.from({ length: 32 }).map((_, i) => new Chromosome(0, i + 1)),
-]);
+function generatePopulation(size: number) {
+    return Array.from({ length: size }).map((_, i) => new Chromosome(0, i + 1));
+}
+
+export const populationSize = ref(4);
+export const generations = shallowRef([generatePopulation(populationSize.value)]);
 export const currentGeneration = ref(0);
 export const population = computed(() => {
     return generations.value[currentGeneration.value]!;
 });
 
+export function reset() {
+    currentGeneration.value = 0;
+    generations.value = [generatePopulation(populationSize.value)];
+}
+
 export const highlightID = ref<string | null>(null);
+
+export const pCross = ref(0.8);
+export const pMutate = ref(0.2);
 
 export function nextGeneration() {
     // TODO

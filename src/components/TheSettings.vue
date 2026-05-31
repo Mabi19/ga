@@ -67,22 +67,55 @@
                         />
                     </div>
                 </fieldset>
-                <div>
-                    {{ State.targetFunctionDomain.value }}
-                </div>
+                <fieldset>
+                    <legend>Evolution</legend>
+                    <div class="evolution-content">
+                        <label for="population-size">Population size</label>
+                        <DualNumberInput
+                            id="population-size"
+                            :min="2"
+                            :max="32"
+                            :step="1"
+                            v-model="populationSize"
+                        />
+                        <WarningLabel
+                            >Population size only applies for new generations, or after
+                            reset.</WarningLabel
+                        >
+                        <label for="p-cross">Crossover probability</label>
+                        <DualNumberInput
+                            id="p-cross"
+                            :min="0"
+                            :max="100"
+                            :step="1"
+                            v-model="pCross"
+                            unit="%"
+                        />
+                        <label for="p-mutate">Mutation probability</label>
+                        <DualNumberInput
+                            id="p-mutate"
+                            :min="0"
+                            :max="100"
+                            :step="1"
+                            v-model="pMutate"
+                            unit="%"
+                        />
+                    </div>
+                </fieldset>
             </div>
         </dialog>
     </Teleport>
 </template>
 
 <script setup lang="ts">
+import { vInvalid } from "@/lib/invalid-directive.ts";
 import * as State from "@/state";
-import { ref, useTemplateRef, watchEffect } from "vue";
+import { computed, ref, useTemplateRef, watchEffect } from "vue";
+import DualNumberInput from "./DualNumberInput.vue";
 import FunctionGraph from "./FunctionGraph.vue";
+import WarningLabel from "./WarningLabel.vue";
 import WindowHeader from "./WindowHeader.vue";
 import WindowHeaderButton from "./WindowHeaderButton.vue";
-import { vInvalid } from "@/lib/invalid-directive.ts";
-import WarningLabel from "./WarningLabel.vue";
 
 const { open } = defineProps<{
     open: boolean;
@@ -150,6 +183,19 @@ watchEffect(() => {
         domainValid.value = false;
     }
 });
+
+const pCross = computed({
+    get: () => Math.round(State.pCross.value * 100),
+    set: (v) => (State.pCross.value = v / 100),
+});
+const pMutate = computed({
+    get: () => Math.round(State.pMutate.value * 100),
+    set: (v) => (State.pMutate.value = v / 100),
+});
+const populationSize = computed({
+    get: () => State.populationSize.value,
+    set: (v) => (State.populationSize.value = Math.round(v)),
+});
 </script>
 
 <style scoped>
@@ -201,6 +247,9 @@ watchEffect(() => {
 .settings-content {
     padding: 0.5em;
     overflow-y: auto;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5em;
 }
 
 .settings-content fieldset {
@@ -250,5 +299,12 @@ watchEffect(() => {
     background-color: var(--bg);
     border: 1px solid var(--bg-dimmer);
     border-radius: 0.25em;
+}
+
+.evolution-content {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.25em;
 }
 </style>
