@@ -79,8 +79,9 @@ function formatNumber(x: number) {
 const isExpanded = ref(false);
 
 function jumpToParent(parent: Chromosome) {
-    // TODO
-    void parent;
+    const generation = parseInt(parent.id.split("#")[0]!);
+    State.currentGeneration.value = generation;
+    State.highlightID.value = parent.id;
 }
 </script>
 

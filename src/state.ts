@@ -33,12 +33,13 @@ export const population = computed(() => {
     return generations.value[currentGeneration.value]!;
 });
 
+export const highlightID = ref<string | null>(null);
+
 export function reset() {
+    highlightID.value = null;
     currentGeneration.value = 0;
     generations.value = [generatePopulation(populationSize.value)];
 }
-
-export const highlightID = ref<string | null>(null);
 
 export const pCross = ref(0.8);
 export const pMutate = ref(0.2);
