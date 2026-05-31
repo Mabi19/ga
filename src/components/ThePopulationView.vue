@@ -1,15 +1,6 @@
-<!--
-TODO
-add a way to show bits instead of x/y
-show heritage in expanded region (incl. jumping to parent. also, back button?)
-sorting
--->
-
 <template>
     <div class="population-view">
-        <WindowHeader title="Population">
-            <WindowHeaderButton icon="fullscreen" />
-        </WindowHeader>
+        <WindowHeader title="Population"></WindowHeader>
         <div class="population-table-wrapper">
             <table id="population-table">
                 <thead>
@@ -78,7 +69,6 @@ import { computed, ref } from "vue";
 import PopulationRow from "./PopulationRow.vue";
 import SortButton from "./SortButton.vue";
 import WindowHeader from "./WindowHeader.vue";
-import WindowHeaderButton from "./WindowHeaderButton.vue";
 
 type SortColumn = "id" | "x" | "y" | "fitness";
 type SortDirection = "ascending" | "descending";

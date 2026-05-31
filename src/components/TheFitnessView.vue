@@ -1,8 +1,6 @@
 <template>
     <div class="fitness-view">
-        <WindowHeader title="Fitness">
-            <WindowHeaderButton icon="fullscreen" />
-        </WindowHeader>
+        <WindowHeader title="Fitness"></WindowHeader>
         <div id="fitness-graph">
             <canvas ref="canvas"></canvas>
         </div>
@@ -15,7 +13,6 @@ import * as State from "@/state";
 import { Chart, type ChartData } from "chart.js";
 import { computed, shallowRef, useTemplateRef, watch } from "vue";
 import WindowHeader from "./WindowHeader.vue";
-import WindowHeaderButton from "./WindowHeaderButton.vue";
 
 type FitnessGraphData = ChartData<"line">;
 

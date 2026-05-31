@@ -1,8 +1,6 @@
 <template>
     <div class="function-view">
-        <WindowHeader title="Function">
-            <WindowHeaderButton icon="fullscreen" />
-        </WindowHeader>
+        <WindowHeader title="Function"></WindowHeader>
         <FunctionGraph
             :func="State.targetFunction.value"
             :domain="State.targetFunctionDomain.value"
@@ -16,7 +14,6 @@
 import * as State from "@/state";
 import FunctionGraph from "./FunctionGraph.vue";
 import WindowHeader from "./WindowHeader.vue";
-import WindowHeaderButton from "./WindowHeaderButton.vue";
 </script>
 
 <style scoped>
