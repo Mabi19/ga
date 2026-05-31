@@ -80,10 +80,15 @@ button:not(.raw) {
         }
     }
 
-    &:has(.material-symbols-rounded) {
+    &:has(.material-symbols-rounded:only-child) {
         display: grid;
         place-items: center;
         padding: 0.25em;
+    }
+
+    &.danger {
+        --input-bg: #e84f34;
+        --input-dim: #cd4831;
     }
 }
 

@@ -8,6 +8,7 @@
     <div id="status-bar" class="dark">
         <div class="generation">Generation {{ State.currentGeneration }}</div>
         <div class="controls">
+            <button @click="State.reset()" class="danger">Reset</button>
             <button @click="State.nextGeneration()">Step</button>
             <button @click="settingsOpen = true"><MaterialIcon name="settings" /></button>
         </div>
