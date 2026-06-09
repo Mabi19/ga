@@ -56,10 +56,10 @@ watchEffect(() => {
     render();
 });
 
-const markerGeometry = new THREE.SphereGeometry(0.1);
+const markerGeometry = new THREE.SphereGeometry(0.2);
 const markerMaterial = new THREE.MeshLambertMaterial();
 const markersMesh = new THREE.InstancedMesh(markerGeometry, markerMaterial, State.MAX_POPULATION);
-const markerColorInactive = new THREE.Color("#22bb22");
+const markerColorInactive = new THREE.Color("#44ee44");
 const markerColorActive = new THREE.Color("#eecc00");
 watchEffect(() => {
     markersMesh.visible = markers;
