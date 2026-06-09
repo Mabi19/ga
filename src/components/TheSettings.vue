@@ -15,7 +15,7 @@
                                     <option value="a">(x^2 - y^2) - (1 - x)^2</option>
                                     <option value="b" selected>x^2 + sin(y)</option>
                                     <option value="c">sin(3*x + y) * sin(y - x) * x</option>
-                                    <option value="sinewave">(sin(x) + cos(y))/2</option>
+                                    <option value="sinewave">sin(x) + cos(y)</option>
                                     <option value="bellcurve">e^-(x^2 + y^2)</option>
                                     <option value="rastrigin">Rastrigin function</option>
                                     <option value="">Custom</option>
