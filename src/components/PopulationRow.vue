@@ -82,6 +82,7 @@ function jumpToParent(parent: Chromosome) {
     const generation = parseInt(parent.id.split("#")[0]!);
     State.currentGeneration.value = generation;
     State.highlightID.value = parent.id;
+    State.hasStrongHighlight.value = true;
 }
 </script>
 

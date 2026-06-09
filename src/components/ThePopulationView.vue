@@ -48,7 +48,8 @@
                         v-for="chromosome of sortedPopulation"
                         :key="chromosome.id"
                         :class="
-                            State.highlightID.value == chromosome.id && hasStrongHighlight
+                            State.highlightID.value == chromosome.id &&
+                            State.hasStrongHighlight.value
                                 ? 'active'
                                 : null
                         "
@@ -103,34 +104,31 @@ function sortBy(col: SortColumn) {
     }
 }
 
-// If this is true, an entry was clicked, and hovering does nothing.
-const hasStrongHighlight = ref(false);
-
 function weakHighlightIn(chromosome: Chromosome) {
-    if (hasStrongHighlight.value) {
+    if (State.hasStrongHighlight.value) {
         return;
     }
     State.highlightID.value = chromosome.id;
 }
 
 function weakHighlightOut() {
-    if (hasStrongHighlight.value) {
+    if (State.hasStrongHighlight.value) {
         return;
     }
     State.highlightID.value = null;
 }
 
 function strongHighlight(chromosome: Chromosome) {
-    if (hasStrongHighlight.value) {
+    if (State.hasStrongHighlight.value) {
         if (State.highlightID.value == chromosome.id) {
             // the element is still hovered
-            hasStrongHighlight.value = false;
+            State.hasStrongHighlight.value = false;
         } else {
             State.highlightID.value = chromosome.id;
         }
     } else {
         State.highlightID.value = chromosome.id;
-        hasStrongHighlight.value = true;
+        State.hasStrongHighlight.value = true;
     }
 }
 </script>
