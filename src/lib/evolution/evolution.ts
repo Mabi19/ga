@@ -54,8 +54,8 @@ export function crossover(
         { type: "parent", parent: b, usedBits: usedLow },
     ]);
     const child2 = new Chromosome(generation, indexB, bits2, [
-        { type: "parent", parent: b, usedBits: usedHigh },
         { type: "parent", parent: a, usedBits: usedLow },
+        { type: "parent", parent: b, usedBits: usedHigh },
     ]);
     return [child1, child2];
 }
@@ -92,8 +92,5 @@ export function mutate(c: Chromosome, pMutate: number): Chromosome {
 
     if (!flippedBits.some(Boolean)) return c;
 
-    return new Chromosome(gen, idx, newBits, [
-        ...c.heritage,
-        { type: "mutate", flippedBits },
-    ]);
+    return new Chromosome(gen, idx, newBits, [...c.heritage, { type: "mutate", flippedBits }]);
 }

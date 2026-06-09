@@ -27,7 +27,7 @@ function generatePopulation(size: number) {
     return Array.from({ length: size }).map((_, i) => new Chromosome(0, i + 1));
 }
 
-export const populationSize = ref(4);
+export const populationSize = ref(8);
 export const generations = shallowRef([generatePopulation(populationSize.value)]);
 export const currentGeneration = ref(0);
 export const population = computed(() => {
@@ -43,16 +43,16 @@ export function reset() {
 }
 
 export const pCross = ref(0.8);
-export const pMutate = ref(0.2);
+export const pMutate = ref(0.05);
 
 export function nextGeneration() {
-    const gen = currentGeneration.value;
+    const gen = generations.value.length - 1;
     const pop = generations.value[gen]!;
     const func = targetFunction.value;
     const newSize = populationSize.value;
     const newGen = gen + 1;
 
-    // Shift fitnesses to be non-negative — required for roulette wheel selection.
+    // Shift fitnesses to be non-negative - required for roulette wheel selection.
     const rawFitnesses = pop.map((c: Chromosome) => fitness(c, func));
     const minF = Math.min(...rawFitnesses);
     const shift = minF < 0 ? -minF : 0;
