@@ -1,4 +1,5 @@
 import { Chromosome } from "@/lib/evolution/chromosome";
+import { copyOf, crossover, fitness, mutate, rouletteSelect } from "@/lib/evolution/evolution";
 import type { FunctionDomain } from "@/lib/expression/domain";
 import { ConstantNode, type ExpressionNode } from "@/lib/expression/node";
 import { parse } from "@/lib/expression/parse";
@@ -45,8 +46,45 @@ export const pCross = ref(0.8);
 export const pMutate = ref(0.2);
 
 export function nextGeneration() {
-    // TODO
-    generations.value.push([...generations.value[currentGeneration.value]!]);
+    const gen = currentGeneration.value;
+    const pop = generations.value[gen]!;
+    const func = targetFunction.value;
+    const newSize = populationSize.value;
+    const newGen = gen + 1;
+
+    // Shift fitnesses to be non-negative — required for roulette wheel selection.
+    const rawFitnesses = pop.map((c: Chromosome) => fitness(c, func));
+    const minF = Math.min(...rawFitnesses);
+    const shift = minF < 0 ? -minF : 0;
+    const adjustedFitnesses = rawFitnesses.map((f: number) => f + shift);
+
+    const nextPop: Chromosome[] = [];
+    let nextIndex = 1;
+
+    while (nextPop.length < newSize) {
+        const parentA = rouletteSelect(pop, adjustedFitnesses);
+        const parentB = rouletteSelect(pop, adjustedFitnesses);
+
+        let offA: Chromosome;
+        let offB: Chromosome;
+
+        if (Math.random() < pCross.value) {
+            const idxA = nextIndex++;
+            const idxB = nextIndex++;
+            [offA, offB] = crossover(parentA, parentB, newGen, idxA, idxB);
+        } else {
+            offA = copyOf(parentA, newGen, nextIndex++);
+            offB = copyOf(parentB, newGen, nextIndex++);
+        }
+
+        offA = mutate(offA, pMutate.value);
+        offB = mutate(offB, pMutate.value);
+
+        nextPop.push(offA);
+        if (nextPop.length < newSize) nextPop.push(offB);
+    }
+
+    generations.value.push(nextPop);
     triggerRef(generations);
     currentGeneration.value = generations.value.length - 1;
 }
