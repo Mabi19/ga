@@ -8,7 +8,7 @@ import { computed, ref, shallowRef, triggerRef, watchEffect } from "vue";
 // Specified here, because a hard bound is required for instancing the graph markers.
 export const MAX_POPULATION = 32;
 
-export const targetFunctionExpression = ref("e^-(x^2 + y^2)");
+export const targetFunctionExpression = ref("x^2 + sin(y)");
 export const targetFunctionIsValid = ref(true);
 export const targetFunction = shallowRef<ExpressionNode>(new ConstantNode(0));
 watchEffect(() => {
@@ -21,7 +21,7 @@ watchEffect(() => {
     }
 });
 
-export const targetFunctionDomain = ref<FunctionDomain>({ xMin: -3, xMax: 3, yMin: -3, yMax: 3 });
+export const targetFunctionDomain = ref<FunctionDomain>({ xMin: 0, xMax: 1, yMin: 0, yMax: 3.14 });
 
 function generatePopulation(size: number) {
     return Array.from({ length: size }).map((_, i) => new Chromosome(0, i + 1));
@@ -35,6 +35,8 @@ export const population = computed(() => {
 });
 
 export const highlightID = ref<string | null>(null);
+// If this is true, an entry was clicked, and hovering does nothing.
+export const hasStrongHighlight = ref(false);
 
 export function reset() {
     highlightID.value = null;

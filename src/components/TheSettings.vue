@@ -9,6 +9,18 @@
                     <legend>Function</legend>
                     <div class="function-content">
                         <div class="function-parameters">
+                            <div class="function-preset">
+                                <label for="function-preset">Preset</label>
+                                <select @input="selectPreset" ref="preset">
+                                    <option value="a">(x^2 - y^2) - (1 - x)^2</option>
+                                    <option value="b" selected>x^2 + sin(y)</option>
+                                    <option value="c">sin(3*x + y) * sin(y - x) * x</option>
+                                    <option value="sinewave">(sin(x) + cos(y))/2</option>
+                                    <option value="bellcurve">e^-(x^2 + y^2)</option>
+                                    <option value="rastrigin">Rastrigin function</option>
+                                    <option value="">Custom</option>
+                                </select>
+                            </div>
                             <div class="function-expression">
                                 <label for="function-expression">Expression</label>
                                 <input
@@ -16,6 +28,7 @@
                                     name="function-expression"
                                     placeholder="f(x, y) ="
                                     v-model="State.targetFunctionExpression.value"
+                                    @input="changeSelectToCustom"
                                 />
                                 <WarningLabel v-if="!State.targetFunctionIsValid.value"
                                     >Invalid expression</WarningLabel
@@ -30,6 +43,7 @@
                                         inputmode="numeric"
                                         v-model="domain.xMin"
                                         v-invalid="testDomainLow(domain.xMin)"
+                                        @input="changeSelectToCustom"
                                     />
                                     <span>, </span>
                                     <input
@@ -37,6 +51,7 @@
                                         inputmode="numeric"
                                         v-model.number="domain.xMax"
                                         v-invalid="testDomainHigh(domain.xMax)"
+                                        @input="changeSelectToCustom"
                                     />
                                     <span>]</span>
                                 </div>
@@ -47,6 +62,7 @@
                                         inputmode="numeric"
                                         v-model.number="domain.yMin"
                                         v-invalid="testDomainLow(domain.yMin)"
+                                        @input="changeSelectToCustom"
                                     />
                                     <span>, </span>
                                     <input
@@ -54,6 +70,7 @@
                                         inputmode="numeric"
                                         v-model.number="domain.yMax"
                                         v-invalid="testDomainHigh(domain.yMax)"
+                                        @input="changeSelectToCustom"
                                     />
                                     <span>]</span>
                                 </div>
@@ -91,7 +108,7 @@
                             v-model="pCross"
                             unit="%"
                         />
-                        <label for="p-mutate">Mutation probability</label>
+                        <label for="p-mutate">Mutation probability (per bit)</label>
                         <DualNumberInput
                             id="p-mutate"
                             :min="0"
@@ -108,6 +125,7 @@
 </template>
 
 <script setup lang="ts">
+import type { FunctionDomain } from "@/lib/expression/domain.ts";
 import { vInvalid } from "@/lib/invalid-directive.ts";
 import * as State from "@/state";
 import { computed, ref, useTemplateRef, watchEffect } from "vue";
@@ -134,6 +152,42 @@ watchEffect(() => {
         dialog.value?.close();
     }
 });
+
+interface Preset {
+    expr: string;
+    domain: FunctionDomain;
+}
+
+const PRESETS: Record<string, Preset> = {
+    a: { expr: "(x^2 - y^2) - (1 - x)^2", domain: { xMin: -2, xMax: 2, yMin: -2, yMax: 2 } },
+    b: { expr: "x^2 + sin(y)", domain: { xMin: 0, xMax: 1, yMin: 0, yMax: 3.14 } },
+    c: { expr: "sin(3*x + y) * sin(y - x) * x", domain: { xMin: -5, xMax: 5, yMin: -5, yMax: 5 } },
+    sinewave: { expr: "sin(x) + cos(y)", domain: { xMin: -5, xMax: 5, yMin: -5, yMax: 5 } },
+    bellcurve: { expr: "e^-(x^2 + y^2)", domain: { xMin: -3, xMax: 3, yMin: -3, yMax: 3 } },
+    rastrigin: {
+        expr: "x^2 / 10 - cos(2 * pi * x) + y^2 / 10 - cos(2 * pi * y)",
+        domain: { xMin: -5.12, xMax: 5.12, yMin: -5.12, yMax: 5.12 },
+    },
+};
+
+const preset = useTemplateRef("preset");
+function selectPreset(ev: InputEvent) {
+    const el = ev.target as HTMLSelectElement;
+    if (el?.value) {
+        const preset = PRESETS[el.value]!;
+        State.targetFunctionExpression.value = preset.expr;
+        domain.value = {
+            xMin: preset.domain.xMin.toString(),
+            xMax: preset.domain.xMax.toString(),
+            yMin: preset.domain.yMin.toString(),
+            yMax: preset.domain.yMax.toString(),
+        };
+    }
+}
+
+function changeSelectToCustom() {
+    if (preset.value) preset.value.value = "";
+}
 
 const domain = ref({
     xMin: State.targetFunctionDomain.value.xMin.toString(),
@@ -287,6 +341,10 @@ const populationSize = computed({
 }
 
 .function-expression input {
+    margin-left: 0.25em;
+}
+
+.function-preset select {
     margin-left: 0.25em;
 }
 

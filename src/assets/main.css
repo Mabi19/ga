@@ -93,8 +93,10 @@ button:not(.raw) {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+select {
     font: inherit;
+    background-color: white;
     padding: 0.25em;
     border-radius: 0.25em;
     border: 1px solid var(--input-dim);
