@@ -119,12 +119,16 @@
                         />
                     </div>
                 </fieldset>
+                <div>
+                    <button @click="downloadRunSummary">Download run summary</button>
+                </div>
             </div>
         </dialog>
     </Teleport>
 </template>
 
 <script setup lang="ts">
+import { fitness } from "@/lib/evolution/evolution.ts";
 import type { FunctionDomain } from "@/lib/expression/domain.ts";
 import { vInvalid } from "@/lib/invalid-directive.ts";
 import * as State from "@/state";
@@ -250,6 +254,31 @@ const populationSize = computed({
     get: () => State.populationSize.value,
     set: (v) => (State.populationSize.value = Math.round(v)),
 });
+
+function downloadRunSummary() {
+    const maxFitness = Math.max(
+        ...State.generations.value[State.generations.value.length - 1]!.map((ch) =>
+            fitness(ch, State.targetFunction.value),
+        ),
+    );
+
+    const content = `
+-- RUN SUMMARY --
+Target function: ${State.targetFunctionExpression.value}
+Domain:          x ∈ [${State.targetFunctionDomain.value.xMin}, ${State.targetFunctionDomain.value.xMax}], y ∈ [${State.targetFunctionDomain.value.yMin}, ${State.targetFunctionDomain.value.yMax}]
+Max fitness:     ${maxFitness}
+Generation:      ${State.generations.value.length - 1}
+Population size: ${State.populationSize.value}
+Crossover prob.: ${State.pCross.value}
+Mutation prob.:  ${State.pMutate.value}
+`;
+    const blob = new Blob([content]);
+    const link = document.createElement("a");
+    link.download = "run-summary.txt";
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
 </script>
 
 <style scoped>
